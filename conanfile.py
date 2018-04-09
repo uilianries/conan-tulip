@@ -16,7 +16,7 @@ class TulipConan(ConanFile):
     default_options = "shared=False", "freetype:shared=False"
     repo = "https://github.com/Tulip-Dev/tulip.git"
     source_dir = "tulip"
-    export_sources = ["CmakeLists.txt"]
+    exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
 
     def requirements(self):
@@ -26,6 +26,7 @@ class TulipConan(ConanFile):
         self.requires("gtest/1.8.0@bincrafters/stable")
         self.requires("freetype/2.9.0@bincrafters/stable")
         self.requires("glew/2.1.0@dimi309/stable")
+        self.requires("Qt/5.8.0@osechet/stable")
 
     def source(self):
         cloned_sources = os.path.join(self.source_folder, self.source_dir)
@@ -38,19 +39,17 @@ class TulipConan(ConanFile):
         pass
 
     def build(self):
-        with tools.chdir(os.path.join(self.source_folder, self.source_dir)):
-            cmake = CMake(self)
-            cmake.verbose = True
-            cmake.definitions["TULIP_USE_THIRDPARTY_QHULL"] = "OFF"
-            cmake.definitions["TULIP_ENABLE_OPENMP"] = "OFF"
-            cmake.definitions["TULIP_BUILD_PYTHON_COMPONENTS"] = "OFF"
-            cmake.definitions["TULIP_BUILD_DOC"] = "OFF"
-            cmake.definitions["TULIP_USE_QT5"] = "ON"
-            # Put Qt path here
-            cmake.definitions["CMAKE_PREFIX_PATH"] = "C:/Qt/5.10.1/msvc2015_64/lib/cmake"
-            cmake.configure()
-            cmake.build()
-            cmake.install()
+        cmake = CMake(self)
+        cmake.verbose = True
+        cmake.definitions["TULIP_USE_THIRDPARTY_QHULL"] = "OFF"
+        cmake.definitions["TULIP_ENABLE_OPENMP"] = "OFF"
+        cmake.definitions["TULIP_BUILD_PYTHON_COMPONENTS"] = "OFF"
+        cmake.definitions["TULIP_BUILD_DOC"] = "OFF"
+        cmake.definitions["TULIP_USE_QT5"] = "ON"
+        # Put Qt path here
+        cmake.configure()
+        cmake.build()
+        cmake.install()
 
     def package(self):
         pass
